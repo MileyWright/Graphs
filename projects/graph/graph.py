@@ -32,7 +32,7 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+
         # 1. Make a Queue
         que = Queue()
         # 2. Enqueue our starting node
@@ -111,21 +111,36 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        shortest_path = collections.deque([])
-        shortest_path.append([starting_vertex])
+        # make a queue
+        que = Queue()
+        # make a set to track nodes we've visited
         visited = set()
 
-        while shortest_path.count is not 0:
-            current = shortest_path.popleft()
-            last = current[-1]
-            if last not in visited:
-                for neighbor in self.get_neighbors(last):
-                    route = list(current)
-                    route.append(neighbor)
-                    shortest_path.append(route)
-                    if neighbor is destination_vertex:
-                        return route
-                visited.add(last)
+        path = [starting_vertex]
+        que.enqueue(path)
+
+        # 1. while queue is not empty
+        while que.size() > 0:
+        ## 2. dequeue the node at the front of the line
+            current_path = que.dequeue()
+            current_node = current_path[-1]
+        ### 3. if this node is our target node
+            if current_node == destination_vertex:
+        #### 4. return true, it is in our network
+                return current_path
+        ### 5. if not vitied
+            if current_node not in visited:
+        #### 6. mark as visited
+                visited.add(current_node)
+        #### 7. get neighbors
+                neighbors = self.get_neighbors(current_node)
+        #### 8. for each neighbor
+                for neighbor in neighbors:
+        ##### 9. Copy path so we don't mutate the original path for different nodes
+                    path_copy = current_path[:]
+                    path_copy.append(neighbor)
+        # 10. add to our queue
+                    que.enqueue(current_path + [neighbor])
 
     def dfs(self, starting_vertex, destination_vertex):
         """
